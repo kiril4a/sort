@@ -2,6 +2,7 @@ import os
 import shutil
 from transliterate import translit
 from sys import argv
+import patoolib
 
 def normalize(filename):
     # Транслітерація та видалення заборонених символів
@@ -22,6 +23,18 @@ def process_folder(folder_path):
     # Видаляємо порожні папки
     if not os.listdir(folder_path):
         os.rmdir(folder_path)
+
+def extract_archive(file_path):
+    # Отримати ім'я архіву без розширення
+    archive_name = os.path.splitext(os.path.basename(file_path))[0]
+
+    # Створити папку для розархівації
+    extract_path = os.path.join(os.path.dirname(file_path), archive_name)
+    os.makedirs(extract_path, exist_ok=True)
+
+    # Розархівація архіву з використанням patoolib
+    patoolib.extract_archive(file_path, outdir=extract_path)
+
 def process_file(file_path):
     _, file_extension = os.path.splitext(file_path)
     file_extension = file_extension.upper()[1:]
@@ -31,12 +44,16 @@ def process_file(file_path):
     # Створюємо відповідну папку, якщо її ще немає
     category_folder = os.path.join(folder_path, category)
     os.makedirs(category_folder, exist_ok=True)
-
     # Нормалізуємо ім'я файлу та перейменовуємо
     new_filename = normalize(os.path.basename(file_path))
     new_filepath = os.path.join(category_folder, new_filename)
 
     shutil.move(file_path, new_filepath)
+    if category == 'archives':
+        extract_archive(new_filepath)
+        os.remove(new_filepath)
+        
+        
 
 def get_category(file_extension):
     image_extensions = {'JPEG', 'PNG', 'JPG', 'SVG'}
