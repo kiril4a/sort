@@ -62,8 +62,7 @@ if __name__ == "__main__":
     if len(argv) != 2:
         print("Usage: python sort.py <folder_path>")
         exit(1)
-    folder_path = r"C:\Users\Kiril4a\Desktop"
-    folder_path = os.path.join(folder_path, argv[1])
+    folder_path = argv[1]
 
     if not os.path.exists(folder_path) or not os.path.isdir(folder_path):
         print("Invalid folder path.")
