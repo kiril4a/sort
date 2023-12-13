@@ -4,10 +4,12 @@ from transliterate import translit
 from sys import argv
 import patoolib
 
+
 def normalize(filename):
     # Транслітерація та видалення заборонених символів
     trans_filename = translit(filename, 'ru', reversed=True)
     return ''.join(c if c.isalnum() or c in {'_', '.'} else '_' for c in trans_filename)
+
 
 def process_folder(folder_path):
     items = os.listdir(folder_path)
@@ -24,6 +26,7 @@ def process_folder(folder_path):
     if not os.listdir(folder_path):
         os.rmdir(folder_path)
 
+
 def extract_archive(file_path):
     # Отримати ім'я архіву без розширення
     archive_name = os.path.splitext(os.path.basename(file_path))[0]
@@ -34,6 +37,7 @@ def extract_archive(file_path):
 
     # Розархівація архіву з використанням patoolib
     patoolib.extract_archive(file_path, outdir=extract_path)
+
 
 def process_file(file_path):
     _, file_extension = os.path.splitext(file_path)
@@ -52,8 +56,7 @@ def process_file(file_path):
     if category == 'archives':
         extract_archive(new_filepath)
         os.remove(new_filepath)
-        
-        
+
 
 def get_category(file_extension):
     image_extensions = {'JPEG', 'PNG', 'JPG', 'SVG'}
@@ -74,6 +77,7 @@ def get_category(file_extension):
         return 'archives'
     else:
         return 'other'
+
 
 if __name__ == "__main__":
     if len(argv) != 2:
