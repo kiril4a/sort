@@ -4,7 +4,6 @@ from transliterate import translit
 from sys import argv
 import patoolib
 
-
 def normalize(filename):
     # Транслітерація та видалення заборонених символів
     trans_filename = translit(filename, 'ru', reversed=True)
@@ -79,7 +78,8 @@ def get_category(file_extension):
         return 'other'
 
 
-if __name__ == "__main__":
+def main():
+    global folder_path
     if len(argv) != 2:
         print("Usage: python sort.py <folder_path>")
         exit(1)
@@ -117,3 +117,6 @@ if __name__ == "__main__":
         print("None")
     else:
         print(unknown_extensions)
+
+    if __name__ == "__main__":
+        main()
